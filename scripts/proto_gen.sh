@@ -3,10 +3,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 
-mkdir -p ${DIR}/pb
-
 rm -rf ${DIR}/pb/*
-
 
 proto_files=$(find "${DIR}/proto" -name '*.proto')
 

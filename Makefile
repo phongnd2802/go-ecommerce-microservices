@@ -1,5 +1,5 @@
 GOOSE_DBSTRING ?= "user=root password=secret host=127.0.0.1 port=5432 dbname=ecommerce sslmode=disable"
-GOOSE_MIGRATION_DIR ?= database/migrations
+GOOSE_MIGRATION_DIR ?= migrations
 GOOSE_DRIVER ?= postgres
 
 network:
@@ -29,4 +29,10 @@ db-cli:
 proto:
 	scripts/proto_gen.sh
 
-.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto
+sqlc:
+	sqlc generate
+
+
+evans:
+	evans --host localhost --port 9000 -r repl
+.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans

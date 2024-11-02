@@ -8,4 +8,6 @@ message RegisterRequest {
     string verify_key = 1;
 }
 
-message RegisterResponse {}
+message RegisterResponse {
+    string verify_id = 1;
+}
