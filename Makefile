@@ -14,6 +14,9 @@ createdb:
 dropdb:
 	docker exec -it ecommerce-db dropdb ecommerce
 
+redis:
+	docker run --name redis --network ecommerce-network -p 6379:6379 -d redis:7.4.1-alpine
+
 migration:
 	@GOOSE_DRIVER=$(GOOSE_DRIVER) GOOSE_DBSTRING=$(GOOSE_DBSTRING) goose -dir=$(GOOSE_MIGRATION_DIR) -s create $(name) sql
 
@@ -32,7 +35,10 @@ proto:
 sqlc:
 	sqlc generate
 
-
 evans:
 	evans --host localhost --port 9000 -r repl
-.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans
+
+redis-cli:
+	docker exec -it redis redis-cli
+
+.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli

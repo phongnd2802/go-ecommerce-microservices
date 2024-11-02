@@ -9,5 +9,5 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-    string verify_id = 1;
+    int64 verify_id = 1;
 }

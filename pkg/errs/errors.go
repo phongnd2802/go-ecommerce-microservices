@@ -6,6 +6,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+
+
 func FieldViolation(field string, err error) *errdetails.BadRequest_FieldViolation {
 	return &errdetails.BadRequest_FieldViolation{
 		Field: field,
@@ -33,4 +35,8 @@ func InternalError(format string, err... error) error {
 
 func ConflictError(format string, err... error) error {
 	return status.Errorf(codes.AlreadyExists, format, err)
+}
+
+func NotFoundError(format string, err... error) error {
+	return status.Errorf(codes.NotFound, format, err)
 }

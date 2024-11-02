@@ -14,3 +14,12 @@ db:
   db_name: ecommerce
   ssl_mode: disable
   pool_max: 10
+
+redis:
+  host: 0.0.0.0
+  port: 6379
+
+email:
+  email_sender_name: NDP-Ecommerce
+  email_sender_address: duyphong02802@gmail.com
+  email_sender_password: xxxx xxxx xxxx xxxx

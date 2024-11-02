@@ -6,13 +6,18 @@ import (
 	"log"
 	"net"
 
+	"github.com/hibiken/asynq"
 	_ "github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/api"
+	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/email"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/repo"
+	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/services"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/services/impl"
+	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/worker"
 	"github.com/phongnd2802/go-ecommerce-microservices/pb"
+	"github.com/phongnd2802/go-ecommerce-microservices/pkg/cache"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -36,9 +41,34 @@ func main() {
 	}
 
 	store := repo.NewStore(connPool)
-	ur := impl.NewUserRegister(store)	
-	server := api.NewServer(cfg, ur)
+	cache := cache.NewRedisCache(fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port))
 
+
+	redisOpt := asynq.RedisClientOpt{
+		Addr: fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
+	}
+
+	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
+	ur := impl.NewUserRegister(store, cache, taskDistributor)
+	mailer := email.NewGmailSender(cfg.Email.EmailSenderName, cfg.Email.EmailSenderAddress, cfg.Email.EmailSenderPassword)
+
+	
+	go runTaskProcessor(redisOpt, mailer)
+	runGrpcServer(cfg, ur)
+}
+
+
+func runTaskProcessor(redisOpt asynq.RedisClientOpt, mailer email.EmailSender) {
+	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, mailer)
+	log.Println("start task processor")
+	err := taskProcessor.Start()
+	if err != nil {
+		log.Fatal("failed to start task processor")
+	}
+}
+
+func runGrpcServer(cfg *user.Config, ur services.UserRegister) {
+	server := api.NewServer(cfg, ur)
 
 	gRPCServer := grpc.NewServer()
 	pb.RegisterUserServiceServer(gRPCServer, server)
