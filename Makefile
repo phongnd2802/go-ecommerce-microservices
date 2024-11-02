@@ -26,4 +26,7 @@ db-down:
 db-cli:
 	docker exec -it ecommerce-db psql -U root -d ecommerce
 
-.PHONY: network postgres createdb dropdb db-up db-down migration db-cli
+proto:
+	scripts/proto_gen.sh
+
+.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto
