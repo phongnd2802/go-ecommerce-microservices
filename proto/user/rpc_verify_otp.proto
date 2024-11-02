@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/phongnd2802/go-ecommerce-microservices/pb/user";
+
+message VerifyOTPRequest {
+    string verify_key = 1;
+    string verify_code = 2;
+}
+
+message VerifyOTPResponse {
+    string token = 1;
+}

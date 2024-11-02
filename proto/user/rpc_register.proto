@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/phongnd2802/go-ecommerce-microservices/pb/user";
+
+message RegisterRequest {
+    string verify_key = 1;
+}
+
+message RegisterResponse {}
