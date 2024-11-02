@@ -4,9 +4,9 @@ package pb;
 
 option go_package = "github.com/phongnd2802/go-ecommerce-microservices/pb";
 
-import "proto/user/rpc_register.proto";
-import "proto/user/rpc_verify_otp.proto";
-import "proto/user/rpc_set_password.proto";
+import "user/rpc_register.proto";
+import "user/rpc_verify_otp.proto";
+import "user/rpc_set_password.proto";
 
 service UserService {
     rpc Register (RegisterRequest) returns (RegisterResponse);
