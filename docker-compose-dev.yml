@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_DB=ecommerce
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+    container_name: ecommerce-db
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+    ports:
+      - "5432:5432"
+    networks:
+      - ecommerce-network
+
+  redis:
+    image: redis:7.4.1-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:

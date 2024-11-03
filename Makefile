@@ -51,10 +51,10 @@ proxy:
 	go run ./cmd/proxy
 
 docker-compose-dev-up:
-	docker compose -f docker-compose-dev.yaml up
+	docker compose -f docker-compose-dev.yml up
 
 docker-compose-dev-down:
-	docker compose -f docker-compose-dev.yaml down
+	docker compose -f docker-compose-dev.yml down
 
 
 
