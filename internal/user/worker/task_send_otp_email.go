@@ -42,7 +42,7 @@ func (distributor *RedisTaskDistributor) DistributeTaskSendOTPEmail(
 func (processor *RedisTaskProcessor) ProcessTaskSendOTPEmail(ctx context.Context, task *asynq.Task) error {
 	var payload PayloadSendOTPEmail
 	if err := json.Unmarshal(task.Payload(), &payload); err != nil {
-		return fmt.Errorf("failed to unmarshal payload: %w", asynq.SkipRetry)
+		return fmt.Errorf("failed to unmarshal payload: %s", asynq.SkipRetry)
 	}
 
 	// subject := "Welcome to NDP-Ecommerce"
@@ -53,7 +53,7 @@ func (processor *RedisTaskProcessor) ProcessTaskSendOTPEmail(ctx context.Context
 
 	// err := processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
 	// if err != nil {
-	// 	return fmt.Errorf("failed to send otp email: %w", err)
+	// 	return fmt.Errorf("failed to send otp email: %s", err)
 	// }
 	log.Info().Str("type", task.Type()).Bytes("payload", task.Payload()). 
 		Str("email", payload.Email).Msg("processed task")

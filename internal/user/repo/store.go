@@ -1,9 +1,14 @@
 package repo
 
-import "github.com/jackc/pgx/v5/pgxpool"
+import (
+	"context"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 type Store interface {
 	Querier
+	RegisterTx(ctx context.Context, arg RegisterTxParams) (RegisterTxResult, error)
 }
 
 // Store provides all functions to execute db queries and transactions
