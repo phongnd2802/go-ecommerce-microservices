@@ -13,25 +13,14 @@ const (
 	smtpServerAddress = "smtp.gmail.com:587"
 )
 
-type EmailSender interface {
-	SendEmail(
-		subject string,
-		content string,
-		to []string,
-		cc []string,
-		bcc []string,
-		attachFiles []string,
-	) error
-}
-
-type GmailSender struct {
+type gmailSender struct {
 	name              string
 	fromEmailAddress  string
 	fromEmailPassword string
 }
 
 // SendEmail implements EmailSender.
-func (sender *GmailSender) SendEmail(subject string, content string, to []string, cc []string, bcc []string, attachFiles []string) error {
+func (sender *gmailSender) SendEmail(subject string, content string, to []string, cc []string, bcc []string, attachFiles []string) error {
 	e := email.NewEmail()
 	e.From = fmt.Sprintf("%s <%s>", sender.name, sender.fromEmailAddress)
 	e.Subject = subject
@@ -52,7 +41,7 @@ func (sender *GmailSender) SendEmail(subject string, content string, to []string
 }
 
 func NewGmailSender(name string, fromEmailAddress string, fromEmailPassword string) EmailSender {
-	return &GmailSender{
+	return &gmailSender{
 		name:              name,
 		fromEmailAddress:  fromEmailAddress,
 		fromEmailPassword: fromEmailPassword,

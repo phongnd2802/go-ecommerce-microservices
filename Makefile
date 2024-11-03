@@ -41,4 +41,7 @@ evans:
 redis-cli:
 	docker exec -it redis redis-cli
 
-.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli
+server:
+	go run cmd/user/main.go
+
+.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli server

@@ -11,7 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/api"
-	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/email"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/repo"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/services"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/services/impl"
@@ -19,6 +18,7 @@ import (
 	"github.com/phongnd2802/go-ecommerce-microservices/pb"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/cache"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/config"
+	"github.com/phongnd2802/go-ecommerce-microservices/pkg/email"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
-	ur := impl.NewUserRegister(store, cache, taskDistributor)
+	ur := impl.NewUserAuth(store, cache, taskDistributor)
 	mailer := email.NewGmailSender(cfg.Email.EmailSenderName, cfg.Email.EmailSenderAddress, cfg.Email.EmailSenderPassword)
 
 	
@@ -67,8 +67,8 @@ func runTaskProcessor(redisOpt asynq.RedisClientOpt, mailer email.EmailSender) {
 	}
 }
 
-func runGrpcServer(cfg *user.Config, ur services.UserRegister) {
-	server := api.NewServer(cfg, ur)
+func runGrpcServer(cfg *user.Config, ua services.UserAuth) {
+	server := api.NewServer(cfg, ua)
 
 	gRPCServer := grpc.NewServer()
 	pb.RegisterUserServiceServer(gRPCServer, server)

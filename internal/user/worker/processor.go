@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/hibiken/asynq"
-	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/email"
+	"github.com/phongnd2802/go-ecommerce-microservices/pkg/email"
 )
 
 const (

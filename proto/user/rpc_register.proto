@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "github.com/phongnd2802/go-ecommerce-microservices/pb/user";
+option go_package = "github.com/phongnd2802/go-ecommerce-microservices/pb/user;dto";
+
 
 message RegisterRequest {
     string verify_key = 1;
