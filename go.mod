@@ -3,6 +3,7 @@ module github.com/phongnd2802/go-ecommerce-microservices
 go 1.23.2
 
 require (
+	github.com/google/wire v0.6.0
 	github.com/hibiken/asynq v0.25.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible

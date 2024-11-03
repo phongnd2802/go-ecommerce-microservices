@@ -2,8 +2,11 @@ package cache
 
 import (
 	"context"
-	"github.com/redis/go-redis/v9"
+	"fmt"
 	"time"
+
+	"github.com/phongnd2802/go-ecommerce-microservices/pkg/settings"
+	"github.com/redis/go-redis/v9"
 )
 
 type redisCache struct {
@@ -20,7 +23,8 @@ func (redis *redisCache) Set(ctx context.Context, key string, value string, expi
 	return redis.r.Set(ctx, key, value, expiration).Err()
 }
 
-func NewRedisCache(addr string) Cache {
+func NewRedisCache(cfg settings.RedisSetting) Cache {
+	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
 	rdb := redis.NewClient(&redis.Options{
 		Addr: addr,
 		Password: "",

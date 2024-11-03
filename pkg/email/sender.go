@@ -1,11 +1,11 @@
 package email
 
-
 import (
 	"fmt"
 	"net/smtp"
 
 	"github.com/jordan-wright/email"
+	"github.com/phongnd2802/go-ecommerce-microservices/pkg/settings"
 )
 
 const (
@@ -40,10 +40,10 @@ func (sender *gmailSender) SendEmail(subject string, content string, to []string
 	return e.Send(smtpServerAddress, smtpAuth)
 }
 
-func NewGmailSender(name string, fromEmailAddress string, fromEmailPassword string) EmailSender {
+func NewGmailSender(setting settings.EmailSetting) EmailSender {
 	return &gmailSender{
-		name:              name,
-		fromEmailAddress:  fromEmailAddress,
-		fromEmailPassword: fromEmailPassword,
+		name:              setting.EmailSenderName,
+		fromEmailAddress:  setting.EmailSenderAddress,
+		fromEmailPassword: setting.EmailSenderPassword,
 	}
 }
