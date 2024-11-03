@@ -1,0 +1,25 @@
+http:
+  host: 0.0.0.0
+  port: 5000
+
+grpc:
+  host: 0.0.0.0
+  port: 9000
+
+db: 
+  host: 0.0.0.0
+  port: 5432
+  username: root
+  password: secret
+  db_name: ecommerce
+  ssl_mode: disable
+  pool_max: 10
+
+redis:
+  host: 0.0.0.0
+  port: 6379
+
+email:
+  email_sender_name: XXX
+  email_sender_address: example@gmail.com
+  email_sender_password: xxxx xxxx xxxx xxxx
