@@ -35,8 +35,11 @@ proto:
 sqlc:
 	sqlc generate
 
+wire:
+	cd internal/user/app && wire && cd -
+
 evans:
-	evans --host localhost --port 9000 -r repl
+	evans --host localhost --port $(port) -r repl
 
 redis-cli:
 	docker exec -it redis redis-cli
@@ -47,7 +50,14 @@ user:
 proxy:
 	go run ./cmd/proxy
 
+docker-compose-dev-up:
+	docker compose -f docker-compose-dev.yaml up
+
+docker-compose-dev-down:
+	docker compose -f docker-compose-dev.yaml down
+
+
 
 
 .PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli server \
-	user proxy
+	user proxy docker-compose-dev-up docker-compose-dev-down wire
