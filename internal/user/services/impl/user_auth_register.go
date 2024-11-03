@@ -2,8 +2,6 @@ package impl
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"strconv"
 	"time"
 
@@ -16,6 +14,7 @@ import (
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/errs"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/utils/crypto"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/utils/random"
+	"github.com/rs/zerolog/log"
 )
 
 
@@ -28,7 +27,8 @@ const (
 func (ur *userAuthImpl) Register(ctx context.Context, req *dto.RegisterRequest) (*repo.UserUserVerify, error) {
 	// Hash Email
 	hashedEmail := crypto.GetHash(req.GetVerifyKey())
-	fmt.Println(hashedEmail)
+	
+	log.Debug().Str("hashEmail", hashedEmail)
 
 	// Check user exists in user base table
 	userFound, err := ur.store.CheckUserBaseExists(ctx, req.GetVerifyKey())
@@ -46,7 +46,7 @@ func (ur *userAuthImpl) Register(ctx context.Context, req *dto.RegisterRequest) 
 
 	switch {
 	case err == cache.ErrKeyNotFound:
-		log.Println("Key does not exist")
+		log.Info().Msg("Key does not exist")
 	case err != nil:
 		return nil, errs.InternalError("Get failed::", err)
 	case otpFound != "":
@@ -55,7 +55,7 @@ func (ur *userAuthImpl) Register(ctx context.Context, req *dto.RegisterRequest) 
 
 	// Generate OTP
 	otpNew := random.GenerateSixDigit()
-	log.Printf("OTP is :: %d\n", otpNew)
+	log.Debug().Int("OTP", otpNew)
 
 	// Save OTP to Postgres
 	userVerify, err := ur.store.CreateUserVerify(ctx, repo.CreateUserVerifyParams{
@@ -88,6 +88,6 @@ func (ur *userAuthImpl) Register(ctx context.Context, req *dto.RegisterRequest) 
 	if err != nil {
 		return nil, errs.InternalError("%w", err)
 	}
-
+	
 	return &userVerify, nil
 }

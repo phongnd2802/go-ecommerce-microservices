@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/hibiken/asynq"
+	"github.com/rs/zerolog/log"
 )
 
 const TaskSendOTPEmail = "task:send_otp_email"
@@ -32,7 +32,9 @@ func (distributor *RedisTaskDistributor) DistributeTaskSendOTPEmail(
 	if err != nil {
 		return fmt.Errorf("failed to enqueue task: %w", err)
 	}
-	log.Println(info.Queue)
+
+	log.Info().Str("type", task.Type()).Bytes("payload", task.Payload()). 
+		Str("queue", info.Queue).Int("max_retry", info.MaxRetry).Msg("enqueued task")
 	return nil
 }
 
@@ -43,16 +45,17 @@ func (processor *RedisTaskProcessor) ProcessTaskSendOTPEmail(ctx context.Context
 		return fmt.Errorf("failed to unmarshal payload: %w", asynq.SkipRetry)
 	}
 
-	subject := "Welcome to NDP-Ecommerce"
-	content := fmt.Sprintf(`Hello,<br/> 
-	Thank you for registering with us!<br/>
-	OTP is %s<br/>`, payload.OTP)
-	to := []string{payload.Email}
+	// subject := "Welcome to NDP-Ecommerce"
+	// content := fmt.Sprintf(`Hello,<br/> 
+	// Thank you for registering with us!<br/>
+	// OTP is %s<br/>`, payload.OTP)
+	// to := []string{payload.Email}
 
-	err := processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
-	if err != nil {
-		return fmt.Errorf("failed to send otp email: %w", err)
-	}
-
+	// err := processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
+	// if err != nil {
+	// 	return fmt.Errorf("failed to send otp email: %w", err)
+	// }
+	log.Info().Str("type", task.Type()).Bytes("payload", task.Payload()). 
+		Str("email", payload.Email).Msg("processed task")
 	return nil
 }

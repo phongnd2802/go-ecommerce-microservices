@@ -41,7 +41,13 @@ evans:
 redis-cli:
 	docker exec -it redis redis-cli
 
-server:
-	go run cmd/user/main.go
+user:
+	go run ./cmd/user
 
-.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli server
+proxy:
+	go run ./cmd/proxy
+
+
+
+.PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli server \
+	user proxy

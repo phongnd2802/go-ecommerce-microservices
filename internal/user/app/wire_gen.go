@@ -7,9 +7,7 @@
 package app
 
 import (
-	"github.com/hibiken/asynq"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/phongnd2802/go-ecommerce-microservices/internal/user"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/repo"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/services/impl"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/worker"
@@ -21,22 +19,22 @@ import (
 
 // Injectors from wire.go:
 
-func InitServer(cfg *user.Config, postgresSetting settings.PostgresSetting, redisSetting settings.RedisSetting, redisOpt asynq.RedisClientOpt) (*Server, error) {
+func InitServer(postgresSetting settings.PostgresSetting, redisSetting settings.RedisSetting) (*Server, error) {
 	pool, err := newDBEngine(postgresSetting)
 	if err != nil {
 		return nil, err
 	}
 	store := repo.NewStore(pool)
 	cacheCache := cache.NewRedisCache(redisSetting)
-	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
+	taskDistributor := worker.NewRedisTaskDistributor(redisSetting)
 	userAuth := impl.NewUserAuth(store, cacheCache, taskDistributor)
-	server := NewServer(cfg, userAuth)
+	server := NewServer(userAuth)
 	return server, nil
 }
 
-func InitTaskProcessor(redisOpt asynq.RedisClientOpt, emailSetting settings.EmailSetting) (worker.TaskProcessor, error) {
+func InitTaskProcessor(redisSettings settings.RedisSetting, emailSetting settings.EmailSetting) (worker.TaskProcessor, error) {
 	emailSender := email.NewGmailSender(emailSetting)
-	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, emailSender)
+	taskProcessor := worker.NewRedisTaskProcessor(redisSettings, emailSender)
 	return taskProcessor, nil
 }
 

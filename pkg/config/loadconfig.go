@@ -5,8 +5,8 @@ import "github.com/spf13/viper"
 
 func LoadConfig(path string, cfgName string, cfgType string, cfgObj interface{}) error {
 	viper.AddConfigPath(path)
-	viper.SetConfigName("user")
-	viper.SetConfigType("yaml")
+	viper.SetConfigName(cfgName)
+	viper.SetConfigType(cfgType)
 
 	err := viper.ReadInConfig()
 	if err != nil {
