@@ -7,9 +7,15 @@ option go_package = "github.com/phongnd2802/go-ecommerce-microservices/pb";
 import "user/rpc_register.proto";
 import "user/rpc_verify_otp.proto";
 import "user/rpc_set_password.proto";
+import "google/api/annotations.proto";
 
 service UserService {
-    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc Register (RegisterRequest) returns (RegisterResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/users/register"
+            body: "*"
+        };
+    }
     rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse);
     rpc UpdatePasswordRegister (SetPasswordRequest) returns (SetPasswordResponse);
 }

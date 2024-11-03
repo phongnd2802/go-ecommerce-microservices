@@ -15,7 +15,6 @@ import (
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/email"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/postgres"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/settings"
-	"google.golang.org/grpc"
 )
 
 
@@ -24,7 +23,6 @@ func InitServer(
 	postgresSetting settings.PostgresSetting,
 	redisSetting settings.RedisSetting,
 	redisOpt asynq.RedisClientOpt,
-	grpcServer *grpc.Server,
 ) (*Server, error) {
 	panic(wire.Build(
 		NewServer,

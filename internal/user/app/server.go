@@ -4,8 +4,6 @@ import (
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user"
 	"github.com/phongnd2802/go-ecommerce-microservices/internal/user/services"
 	"github.com/phongnd2802/go-ecommerce-microservices/pb"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 type Server struct {
@@ -15,13 +13,10 @@ type Server struct {
 
 }
 
-func NewServer(config *user.Config, ua services.UserAuth, grpcServer *grpc.Server) *Server {
+func NewServer(config *user.Config, ua services.UserAuth) *Server {
 	server := Server{
 		config: config,
 		ua: ua,
 	}
-
-	pb.RegisterUserServiceServer(grpcServer, &server)
-	reflection.Register(grpcServer)
 	return &server
 }

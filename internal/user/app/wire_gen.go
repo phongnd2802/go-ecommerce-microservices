@@ -17,12 +17,11 @@ import (
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/email"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/postgres"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/settings"
-	"google.golang.org/grpc"
 )
 
 // Injectors from wire.go:
 
-func InitServer(cfg *user.Config, postgresSetting settings.PostgresSetting, redisSetting settings.RedisSetting, redisOpt asynq.RedisClientOpt, grpcServer *grpc.Server) (*Server, error) {
+func InitServer(cfg *user.Config, postgresSetting settings.PostgresSetting, redisSetting settings.RedisSetting, redisOpt asynq.RedisClientOpt) (*Server, error) {
 	pool, err := newDBEngine(postgresSetting)
 	if err != nil {
 		return nil, err
@@ -31,7 +30,7 @@ func InitServer(cfg *user.Config, postgresSetting settings.PostgresSetting, redi
 	cacheCache := cache.NewRedisCache(redisSetting)
 	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
 	userAuth := impl.NewUserAuth(store, cacheCache, taskDistributor)
-	server := NewServer(cfg, userAuth, grpcServer)
+	server := NewServer(cfg, userAuth)
 	return server, nil
 }
 
