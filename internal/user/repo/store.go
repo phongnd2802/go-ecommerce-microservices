@@ -9,6 +9,7 @@ import (
 type Store interface {
 	Querier
 	RegisterTx(ctx context.Context, arg RegisterTxParams) (RegisterTxResult, error)
+	UpdatePasswordRegisterTx(ctx context.Context, arg UpdatePassswordParamsTx) (UpdatePasswordResultTx, error)
 }
 
 // Store provides all functions to execute db queries and transactions

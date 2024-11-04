@@ -20,6 +20,18 @@ type UserUserBase struct {
 	UserUpdatedAt  pgtype.Timestamp `json:"user_updated_at"`
 }
 
+type UserUserProfile struct {
+	UserID        int64            `json:"user_id"`
+	UserEmail     string           `json:"user_email"`
+	UserNickname  string           `json:"user_nickname"`
+	UserAvatar    pgtype.Text      `json:"user_avatar"`
+	UserMobile    pgtype.Text      `json:"user_mobile"`
+	UserGender    pgtype.Bool      `json:"user_gender"`
+	UserBirthday  pgtype.Date      `json:"user_birthday"`
+	UserCreatedAt pgtype.Timestamp `json:"user_created_at"`
+	UserUpdatedAt pgtype.Timestamp `json:"user_updated_at"`
+}
+
 type UserUserVerify struct {
 	VerifyID        int64            `json:"verify_id"`
 	VerifyOtp       string           `json:"verify_otp"`

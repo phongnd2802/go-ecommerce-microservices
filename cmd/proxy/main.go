@@ -5,10 +5,12 @@ import (
 	"net/http"
 	"os"
 
+	_ "github.com/phongnd2802/go-ecommerce-microservices/docs/statik"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/phongnd2802/go-ecommerce-microservices/pb"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/config"
 	"github.com/phongnd2802/go-ecommerce-microservices/pkg/logger"
+	"github.com/rakyll/statik/fs"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -71,6 +73,13 @@ func main() {
 	}
 
 	mux.Handle("/", gw)
+
+	statikFS, err := fs.New()
+	if err != nil {
+		log.Fatal().Msgf("cannot create statik fs: %v", err)
+	}
+	swaggerHandler := http.StripPrefix("/docs/", http.FileServer(statikFS))
+	mux.Handle("/docs/", swaggerHandler)
 
 	server := &http.Server{
 		Addr: cfg.HttpAddr(),

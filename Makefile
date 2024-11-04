@@ -56,8 +56,11 @@ docker-compose-dev-up:
 docker-compose-dev-down:
 	docker compose -f docker-compose-dev.yml down
 
+templ:
+	templ generate
 
-
-
+web:
+	go run ./web/
+	
 .PHONY: network postgres createdb dropdb db-up db-down migration db-cli proto sqlc evans redis redis-cli server \
-	user proxy docker-compose-dev-up docker-compose-dev-down wire
+	user proxy docker-compose-dev-up docker-compose-dev-down wire templ web

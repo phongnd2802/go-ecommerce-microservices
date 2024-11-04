@@ -45,16 +45,16 @@ func (processor *RedisTaskProcessor) ProcessTaskSendOTPEmail(ctx context.Context
 		return fmt.Errorf("failed to unmarshal payload: %s", asynq.SkipRetry)
 	}
 
-	// subject := "Welcome to NDP-Ecommerce"
-	// content := fmt.Sprintf(`Hello,<br/> 
-	// Thank you for registering with us!<br/>
-	// OTP is %s<br/>`, payload.OTP)
-	// to := []string{payload.Email}
+	subject := "Welcome to NDP-Ecommerce"
+	content := fmt.Sprintf(`Hello,<br/> 
+	Thank you for registering with us!<br/>
+	OTP is %s<br/>`, payload.OTP)
+	to := []string{payload.Email}
 
-	// err := processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
-	// if err != nil {
-	// 	return fmt.Errorf("failed to send otp email: %s", err)
-	// }
+	err := processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to send otp email: %s", err)
+	}
 	log.Info().Str("type", task.Type()).Bytes("payload", task.Payload()). 
 		Str("email", payload.Email).Msg("processed task")
 	return nil

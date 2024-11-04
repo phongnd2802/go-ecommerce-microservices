@@ -8,6 +8,19 @@ import "user/rpc_register.proto";
 import "user/rpc_verify_otp.proto";
 import "user/rpc_set_password.proto";
 import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+      title: "eCommerce API"
+      version: "1.0"
+      contact: {
+        name: "Phong ND"
+        url: "https://github.com/phongnd2802/go-ecommerce-microservices"
+        email: "duyphong02802@gmail.com"
+      };
+    };
+  };
 
 service UserService {
     rpc Register (RegisterRequest) returns (RegisterResponse) {
@@ -15,7 +28,29 @@ service UserService {
             post: "/api/v1/users/register"
             body: "*"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to register";
+            summary: "Register";  
+        };
     }
-    rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse);
-    rpc UpdatePasswordRegister (SetPasswordRequest) returns (SetPasswordResponse);
+    rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/users/verify_otp"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to Verify OTP";
+            summary: "Verify OTP";  
+        };
+    }
+    rpc UpdatePasswordRegister (SetPasswordRequest) returns (SetPasswordResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/users/set_password"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to Update password register";
+            summary: "Update password register";  
+        };
+    }
 }

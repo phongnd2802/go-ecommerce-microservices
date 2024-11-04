@@ -8,8 +8,6 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=secret
     container_name: ecommerce-db
-    healthcheck:
-      test: ["CMD", "pg_isready"]
     ports:
       - "5432:5432"
     networks:

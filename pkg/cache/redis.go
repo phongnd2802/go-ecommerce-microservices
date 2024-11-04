@@ -24,7 +24,6 @@ func (redis *redisCache) Set(ctx context.Context, key string, value string, expi
 	return redis.r.Set(ctx, key, value, expiration).Err()
 }
 
-
 func NewRedisCache(cfg settings.RedisSetting) Cache {
 	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
 	rdb := redis.NewClient(&redis.Options{

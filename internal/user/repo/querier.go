@@ -10,7 +10,11 @@ import (
 
 type Querier interface {
 	CheckUserBaseExists(ctx context.Context, userEmail string) (int64, error)
+	CreateUserBase(ctx context.Context, arg CreateUserBaseParams) (UserUserBase, error)
+	CreateUserProfile(ctx context.Context, arg CreateUserProfileParams) (UserUserProfile, error)
 	CreateUserVerify(ctx context.Context, arg CreateUserVerifyParams) (UserUserVerify, error)
+	GetUserVerifyByKeyHash(ctx context.Context, verifyKeyHash string) (UserUserVerify, error)
+	UpdateUserVerify(ctx context.Context, arg UpdateUserVerifyParams) (UserUserVerify, error)
 }
 
 var _ Querier = (*Queries)(nil)

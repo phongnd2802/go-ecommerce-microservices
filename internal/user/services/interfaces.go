@@ -10,7 +10,7 @@ import (
 type (
 	UserAuth interface {
 		Register(ctx context.Context, req *dto.RegisterRequest) (*repo.UserUserVerify, error)
-		VerifyOTP(ctx context.Context, req *dto.VerifyOTPRequest) (*dto.VerifyOTPResponse, error)
-		UpdatePasswordRegister(ctx context.Context, req *dto.SetPasswordRequest) (*dto.SetPasswordResponse, error)
+		VerifyOTP(ctx context.Context, req *dto.VerifyOTPRequest) (*repo.UserUserVerify, error)
+		UpdatePasswordRegister(ctx context.Context, req *dto.SetPasswordRequest) (*repo.UserUserProfile, error)
 	}
 )

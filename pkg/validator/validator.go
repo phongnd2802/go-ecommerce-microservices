@@ -13,6 +13,13 @@ func ValidateString(value string, minLength int, maxLength int) error {
 	return nil
 }
 
+func ValidateInt(value int64, minValue int64, maxValue int64) error {
+	if value < minValue || value > maxValue {
+		return fmt.Errorf("must be a number from %d to %d", minValue, maxValue)
+	}
+	return nil
+}
+
 func ValidateEmail(value string) error {
 	if err := ValidateString(value, 3, 255); err != nil {
 		return err
@@ -23,4 +30,10 @@ func ValidateEmail(value string) error {
 	}
 
 	return nil
+}
+
+
+
+func ValidatePassword(password string) error {
+	return ValidateString(password, 6, 100)
 }

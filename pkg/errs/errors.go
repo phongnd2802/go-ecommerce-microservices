@@ -40,3 +40,7 @@ func ConflictError(format string, err... error) error {
 func NotFoundError(format string, err... error) error {
 	return status.Errorf(codes.NotFound, format, err)
 }
+
+func UnauthenticatedError(format string, err... error) error {
+	return status.Errorf(codes.Unauthenticated, format, err)
+}

@@ -11,4 +11,3 @@ func GetHash(value string) string {
 	hashBytes := hash.Sum(nil)
 	return hex.EncodeToString(hashBytes)
 }
-

@@ -58,6 +58,7 @@ func (ur *userAuthImpl) Register(ctx context.Context, req *dto.RegisterRequest) 
 	otpNew := random.GenerateSixDigit()
 	log.Debug().Int("OTP", otpNew)
 
+	//Execture Register Transaction
 	// Save OTP to Postgres
 	arg := repo.RegisterTxParams{
 		CreateUserVerifyParams: repo.CreateUserVerifyParams{
@@ -68,7 +69,7 @@ func (ur *userAuthImpl) Register(ctx context.Context, req *dto.RegisterRequest) 
 		AfterCreate: []func(repo.UserUserVerify) error {
 			// Save OTP in Redis with expiration time
 			func(uv repo.UserUserVerify) error {
-				err = ur.cache.Set(ctx, uv.VerifyKeyHash, uv.VerifyOtp, time.Duration(TIME_OTP_REGISTERED)*time.Minute)
+				err = ur.cache.Set(ctx, userKey, uv.VerifyOtp, time.Duration(TIME_OTP_REGISTERED)*time.Minute)
 				if err != nil {
 					return errs.InternalError("failed to set otp to redis: %s", err)
 				}
